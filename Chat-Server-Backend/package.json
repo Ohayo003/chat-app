@@ -1,0 +1,15 @@
+{
+  "name": "chat-server-backend",
+  "version": "1.0.0",
+  "description": "used to communicate user realtime",
+  "main": "chat-server.js",
+  "scripts": {
+    "start": "nodemon chat-server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.12",
+    "socket.io": "^4.1.3"
+  }
+}

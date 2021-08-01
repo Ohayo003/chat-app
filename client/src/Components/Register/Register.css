@@ -1,0 +1,25 @@
+.registerContainer{
+    justify-content: center;
+    background-color: aquamarine;
+    margin-top: 3%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 10px 5px 5px 5px blueviolet ; 
+    
+} 
+form{
+    padding: 20px;
+}
+h1{
+    color: white;
+}
+.inputRegisterDiv{
+    text-align: left;
+    margin:5px;
+}
+.registerContainer .buttonRegister{
+    width: 95%;
+}
+.text-right{
+    text-align: right;
+}

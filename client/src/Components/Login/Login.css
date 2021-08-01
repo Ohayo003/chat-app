@@ -1,0 +1,29 @@
+.loginContainer{
+    justify-content: center;
+    background-color: aquamarine;
+    margin-top: 3%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 10px 5px 5px 5px blueviolet ; 
+    
+} 
+form{
+    padding: 20px;
+}
+h1{
+    color: white;
+}
+.inputDiv{
+    text-align: left;
+    margin:5px;
+}
+.check-box .custom-control-input{
+    align-items:  left;
+}
+.loginContainer .button{
+    width: 95%;
+}
+.text-right{
+    text-align: right;
+    font-weight: 400;
+}

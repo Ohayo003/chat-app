@@ -1,0 +1,22 @@
+.userFriendInfoContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: slateblue;
+    border-radius: 4px 4px 0 0;
+    height: 50px;
+    width: 100%;
+}
+.userFriendInfoLeft{
+    flex: 0.5;
+    display: flex;
+    align-items: cetner;
+    margin-left: 5%;
+    color: white;
+}
+.userFriendInfoRight{
+    display: flex;
+    flex: 0.5;
+    justify-content: flex-end;
+    margin-right: 5%;
+}

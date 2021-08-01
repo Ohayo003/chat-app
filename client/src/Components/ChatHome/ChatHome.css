@@ -1,0 +1,124 @@
+.chatMessageContainer{
+    width: 100%;
+    height: 100vh;
+}
+.outerContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 85vh;
+    background-color: #ffffff;
+    border-radius: 15%;
+}
+.ChatInnerContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #ffffff;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+}
+.contactOuterContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    background-color: #ffffff;
+    border-radius: 10%;
+}
+.contactInnerContainer{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    background: #ffffff;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+}
+.topContainer{
+    display: flex;
+    align-items: center;
+    font-weight: 500px;
+    cursor: pointer;
+    padding-top: 10px;
+    position: relative;
+    background:slateblue;
+    justify-content: space-between;
+    padding: 5px;
+    text-align: left; 
+}
+.topContainer h4{
+    color: white;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.user-list {
+    list-style: none;
+    background: white;
+}
+.user-list:hover{
+    cursor: pointer;
+}
+.unread-message{
+    display: inline-flex;
+    float: right;
+    margin-right: 2%;
+}
+.chatBoxBottom{
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chatMessageInput{
+    width: 85%;
+    height: 90px;
+    padding: 10px;
+}
+.chatSubmitButton{
+    width: 70px;
+    height: 40px;
+    border:none;
+    margin-right: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: mediumslateblue;
+}
+.noConvo{
+    margin-top: 30%;
+    position: aboslute;
+    font-weight: 500;
+    color: lightgray;
+}
+.CreateMessage{
+    font-size: 40px;
+    position: relative;
+}
+.ComposeContainer{
+    position:fixed;
+	width:110px;
+	height:80px;
+	bottom:40px;
+	right:40px;
+	border-radius:50px;
+	text-align:center;
+}
+.composeButton{
+    margin-top: -10px;
+    padding-left: 20px;
+}
+.chatBoxTop{
+    height: 100%;
+    overflow-y: scroll;
+}
+.friendContainer{
+    height: 50%;
+}
+.friendChatHistoryContainer{
+    height: 40%;
+}
+.clickedContact:hover {background-color: #ddd; color: white}
+.clickedContact:focus {background-color: #ddd;}

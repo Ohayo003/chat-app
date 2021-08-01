@@ -1,0 +1,77 @@
+.ContactsContainer {
+    display: flex;
+    align-items: center;
+    font-weight: 500px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+}
+
+.onlineContactsImage {
+    width: 40px;
+    height: -40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid white
+}
+
+.contactsImageContainer {
+    position: relative;
+}
+
+.contactsOnlineBadge {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: limegreen;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+.contactOnlineName {
+    font-weight: bold;
+    padding-left: 10px;
+    color: black;
+}
+
+.name-menu-container {
+    display: inline-block;
+    line-height: 20px;
+    padding: 0 10px;
+}
+
+.dropdown{
+    position: relative;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-menu h6 {
+    color: black;
+    padding: 7px 7px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-menu h6:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-menu h6:hover {
+    background-color: #ddd;
+}
