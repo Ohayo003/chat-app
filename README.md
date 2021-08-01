@@ -1,5 +1,5 @@
 # chat-app
-In this App i separated the socket.io server and the database server.
+In this App i separated the socket.io server and the database server which i used the mongodb database.
 Run Chat-Server-backend and the server.
 Then in the client please install the depedencies needed using npm install and after that run the client.
 
