@@ -21,4 +21,4 @@ in this app there are 6 dummy accounts
    password: test123
    
 You can create a new account and then sign in to try the functionality of the sign-in and sign-up of the app.
-before you can message a user you must first add her/him as a friend. After adding him/her it will automatically add each of you on the friend list of each account.
+
