@@ -43,28 +43,33 @@ function UserInfo({ currentUser }) {
     };
 
     try {
-      const addUser = await axios.post("/api/chat/users/email", email);
-      const friendId = {
-        friendId: addUser.data._id,
-      };
-      if (currentUser.email !== addUser.data.email) {
-        await axios
-          .put(`/api/chat/users/friends/add/${currentUser._id}`, friendId)
-          .then(async (response) => {
-            const friendId = {
-              friendId: response.data._id,
-            };
-            await axios.put(
-              `/api/chat/users/friends/add/${addUser.data._id}`,
-              friendId
-            );
-          });
-
-        toast.success(`${addUser.data.name} has been added to your contacts`);
-        closeModal();
-        // window.location.reload(true);
+      if (addContact.current.value === "") {
+        toast.error("Please enter an email!");
       } else {
-        toast.error(`Cannot add your self!`);
+        const addUser = await axios.post("/api/chat/users/email", email);
+        const friendId = {
+          friendId: addUser.data._id,
+        };
+        if (currentUser.email !== addUser.data.email) {
+          await axios
+            .put(`/api/chat/users/friends/add/${currentUser._id}`, friendId)
+            .then(async (response) => {
+              const friendId = {
+                friendId: response.data._id,
+              };
+              await axios.put(
+                `/api/chat/users/friends/add/${addUser.data._id}`,
+                friendId
+              );
+            });
+
+          toast.success(`${addUser.data.name} has been added to your contacts`);
+          addContact.current.value = "";
+          closeModal();
+          // window.location.reload(true);
+        } else {
+          toast.error(`Cannot add your self!`);
+        }
       }
     } catch (error) {
       toast.error(`user with ${email.email} does not exist!`);
@@ -105,7 +110,7 @@ function UserInfo({ currentUser }) {
         />
         <div className="dropdown-content">
           <h4 style={{ marginTop: 2, color: "black" }}>{currentUser.name}</h4>
-          <h6 onClick={showModalForm} >Add Contact</h6>
+          <h6 onClick={showModalForm}>Add Contact</h6>
           <h6 onClick={showModalMyAccount}>Change Password</h6>
           <h6 onClick={handleLogout}>Sign out</h6>
         </div>
@@ -116,34 +121,36 @@ function UserInfo({ currentUser }) {
         {/* Modal content */}
         <div className="modal-content">
           <div className="modal-header text-center">
-            <p className="modal-title w-100 font-weight-bold">Add Contact using Email</p>
+            <p className="modal-title w-100 font-weight-bold">
+              Add Contact using Email
+            </p>
             <span className="close" onClick={closeModal}>
               &times;
             </span>
           </div>
           <div className="modal-body mx-3">
-              <div className="md-form ">
-                <label htmlFor="search" className="mb-2">
-                  Enter email of a friend
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="search"
-                  ref={addContact}
-                  placeholder="enter name or email of user..."
-                  required
-                />
-              </div>
-              <div className="modal-footer d-flex justify-content-center">
-                <button
-                  type="submit"
-                  onClick={addFriendContact}
-                  className="btn btn-info btn-sm w-50 btnAdd"
-                >
-                  Add
-                </button>
-              </div>
+            <div className="md-form ">
+              <label htmlFor="search" className="mb-2">
+                Enter email of a friend
+              </label>
+              <input
+                className="form-control"
+                type="email"
+                name="search"
+                ref={addContact}
+                placeholder="enter email of user..."
+                required
+              />
+            </div>
+            <div className="modal-footer d-flex justify-content-center">
+              <button
+                type="submit"
+                onClick={addFriendContact}
+                className="btn btn-info btn-sm w-50 btnAdd"
+              >
+                Add
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -153,47 +160,52 @@ function UserInfo({ currentUser }) {
         {/* Modal content */}
         <div className="modal-content">
           <div className="modal-header text-center">
-            <p className="modal-title w-100 font-weight-bold">Change Password</p>
+            <p className="modal-title w-100 font-weight-bold">
+              Change Password
+            </p>
             <span className="close" onClick={closeModal}>
               &times;
             </span>
           </div>
           <div className="modal-body mx-3">
-              <div className="md-form">
-                <label htmlFor="newPassowrd" className="mb-2">
-                  New Password
-                </label>
-                <input
-                  className="form-control"
-                  type="password"
-                  name="newPassword"
-                  ref={newPassword}
-                  placeholder="New Password"
-                  required
-                />
-              </div>
-              <div className="md-form">
-                <label htmlFor="confirmPassword" className="mt-2 mb-2">
-                  Confirm New Password
-                </label>
-                <input
-                  className="form-control"
-                  type="password"
-                  name="confirmPassword"
-                  ref={confirmNewPassword}
-                  placeholder="Confirm Password"
-                  required
-                />
-              </div>
-              <div className="modal-footer d-flex justify-content-center">
-                <button type="submit" onClick={handleChangePassword} className="btn btn-info btn-sm btnAdd">
-                  Confirm
-                </button>
-              </div>
+            <div className="md-form">
+              <label htmlFor="newPassowrd" className="mb-2">
+                New Password
+              </label>
+              <input
+                className="form-control"
+                type="password"
+                name="newPassword"
+                ref={newPassword}
+                placeholder="New Password"
+                required
+              />
+            </div>
+            <div className="md-form">
+              <label htmlFor="confirmPassword" className="mt-2 mb-2">
+                Confirm New Password
+              </label>
+              <input
+                className="form-control"
+                type="password"
+                name="confirmPassword"
+                ref={confirmNewPassword}
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+            <div className="modal-footer d-flex justify-content-center">
+              <button
+                type="submit"
+                onClick={handleChangePassword}
+                className="btn btn-info btn-sm btnAdd"
+              >
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
     </>
   );
 }

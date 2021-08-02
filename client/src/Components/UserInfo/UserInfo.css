@@ -74,7 +74,7 @@
     padding: 5px;
     border: 1px solid #888;
     height: fit-content;
-    width: fit-content;
+    width: max-content;
     /*Could be more or less, depending on screen size */
 }
 

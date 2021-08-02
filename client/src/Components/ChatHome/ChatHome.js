@@ -137,75 +137,79 @@ export default function ChatHome() {
       email: receiverEmail.current.value,
     };
     try {
-      await axios
-        .post("/api/chat/users/email", emailBody)
-        .then(async (getEmailResponse) => {
-          if (getEmailResponse.data === null) {
-            toast.error(`${emailBody.email} account does not exist!`);
-          } else if (!getEmailResponse.status) {
-            toast.error(`Something went wrong. Please try again.`);
-          }
-          const friendId = {
-            friendId: getEmailResponse.data._id,
-          };
-          //Check if the email is not the current user's email
-          if (user.email !== getEmailResponse.data.email) {
-            await axios
-              .put(`/api/chat/users/friends/add/${user._id}`, friendId)
-              .then(async (addUserResponse) => {
-                const friendId = {
-                  friendId: addUserResponse.data._id,
-                };
-                await axios.put(
-                  `/api/chat/users/friends/add/${getEmailResponse.data._id}`,
-                  friendId
-                );
-              });
-
-            const createConversation = {
-              senderId: user._id,
-              receiverId: getEmailResponse.data._id,
+      if (receiverEmail.current.value !== "") {
+        await axios
+          .post("/api/chat/users/email", emailBody)
+          .then(async (getEmailResponse) => {
+            if (getEmailResponse.data === null) {
+              toast.error(`${emailBody.email} account does not exist!`);
+            } else if (!getEmailResponse.status) {
+              toast.error(`Something went wrong. Please try again.`);
+            }
+            const friendId = {
+              friendId: getEmailResponse.data._id,
             };
-            //Check if the conversation of two users already exist if not add new one
-            await axios
-              .get(
-                `/api/chat/conversation/getConversation/${user._id}/${getEmailResponse.data._id}`
-              )
-              .then(async (getConversationResponse) => {
-                if (getConversationResponse.data === null) {
-                  await axios
-                    .post("/api/chat/conversation", createConversation)
-                    .then(async (newConversationResponse) => {
-                      const messageConvo = {
-                        conId: newConversationResponse.data._id,
-                        sender: user._id,
-                        text: sendMessage,
-                      };
-                      await axios.post("/api/chat/messages", messageConvo);
-                      setSendMessage("");
-                      toast.success(
-                        `Message Successfully send to ${getEmailResponse.data.name}`
-                      );
-                      closeModal();
-                    });
-                } else {
-                  const messageConvo = {
-                    conId: getConversationResponse.data._id,
-                    sender: user._id,
-                    text: sendMessage,
+            //Check if the email is not the current user's email
+            if (user.email !== getEmailResponse.data.email) {
+              await axios
+                .put(`/api/chat/users/friends/add/${user._id}`, friendId)
+                .then(async (addUserResponse) => {
+                  const friendId = {
+                    friendId: addUserResponse.data._id,
                   };
-                  await axios.post("/api/chat/messages", messageConvo);
-                  setSendMessage("");
-                  toast.success(
-                    `Message Successfully send to ${getEmailResponse.data.name}`
+                  await axios.put(
+                    `/api/chat/users/friends/add/${getEmailResponse.data._id}`,
+                    friendId
                   );
-                  closeModal();
-                }
-              });
-          } else {
-            toast.error(`sending messag to self is invalid!`);
-          }
-        });
+                });
+
+              const createConversation = {
+                senderId: user._id,
+                receiverId: getEmailResponse.data._id,
+              };
+              //Check if the conversation of two users already exist if not add new one
+              await axios
+                .get(
+                  `/api/chat/conversation/getConversation/${user._id}/${getEmailResponse.data._id}`
+                )
+                .then(async (getConversationResponse) => {
+                  if (getConversationResponse.data === null) {
+                    await axios
+                      .post("/api/chat/conversation", createConversation)
+                      .then(async (newConversationResponse) => {
+                        const messageConvo = {
+                          conId: newConversationResponse.data._id,
+                          sender: user._id,
+                          text: sendMessage,
+                        };
+                        await axios.post("/api/chat/messages", messageConvo);
+                        setSendMessage("");
+                        toast.success(
+                          `Message Successfully send to ${getEmailResponse.data.name}`
+                        );
+                        closeModal();
+                      });
+                  } else {
+                    const messageConvo = {
+                      conId: getConversationResponse.data._id,
+                      sender: user._id,
+                      text: sendMessage,
+                    };
+                    await axios.post("/api/chat/messages", messageConvo);
+                    setSendMessage("");
+                    toast.success(
+                      `Message Successfully send to ${getEmailResponse.data.name}`
+                    );
+                    closeModal();
+                  }
+                });
+            } else {
+              toast.error(`sending messag to self is invalid!`);
+            }
+          });
+      } else {
+        toast.error("Please Enter Receiver's Email");
+      }
     } catch (error) {
       console.log(error);
     }
