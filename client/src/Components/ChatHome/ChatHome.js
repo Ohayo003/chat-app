@@ -369,7 +369,7 @@ export default function ChatHome() {
                 onClick={handleSendComposedMessage}
                 className="btn btn-info btn-sm btnAdd"
               >
-                Confirm
+                Send Message
               </button>
             </div>
           </div>
