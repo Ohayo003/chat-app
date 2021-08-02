@@ -20,13 +20,11 @@ function ContactList({
 
   //Delete a friend
   const handleDeleteContact = async (friend) => {
-    //console.log(friend);
     const friendId = {
       friendId: friend,
     };
     try {
       await axios.put("/api/chat/users/friends/" + currentUser._id, friendId);
-
       const userId = {
         friendId: currentUser._id,
       };

@@ -28,10 +28,8 @@ users.post("/email", async (req, res) => {
   const email = req.body.email;
   try {
     await UsersSchema.findOne({ email: email }).then((resp) => {
-      if (!resp) {
-        res.status(404).send({
-          message: "email does not exist",
-        });
+      if (resp.data === null) {
+        res.status(404).json({ message: "Email does not Exist" });
       }
       res.status(200).json(resp);
     });

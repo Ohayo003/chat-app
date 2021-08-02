@@ -37,8 +37,7 @@ function UserInfo({ currentUser }) {
   };
 
   //Add new Contact
-  const addFriendContact = async (event) => {
-    event.preventDefault();
+  const addFriendContact = async () => {
     const email = {
       email: addContact.current.value,
     };
@@ -63,6 +62,7 @@ function UserInfo({ currentUser }) {
 
         toast.success(`${addUser.data.name} has been added to your contacts`);
         closeModal();
+        // window.location.reload(true);
       } else {
         toast.error(`Cannot add your self!`);
       }

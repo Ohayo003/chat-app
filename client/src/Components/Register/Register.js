@@ -35,11 +35,8 @@ export default function Register() {
           );
         }
         else if(!response){
-          toast.error(
-            `Something went wrong while creating the account`
-          );
+          toast.error(`Something went wrong while creating the account`);
         }
-        console.log(response.data)
         toast.info(
           `Account ${createUser.email} has been created successfully`
         );

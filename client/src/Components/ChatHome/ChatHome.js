@@ -14,7 +14,6 @@ import { Fab } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 
 export default function ChatHome() {
-  
   const { user } = useContext(AuthContext);
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState("");
@@ -23,7 +22,6 @@ export default function ChatHome() {
   const [friendData, setFriendData] = useState([]);
   const [receiver, setReceiver] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [textMesasge, setTextMessage] = useState([]);
   const receiverEmail = useRef();
   const [newMessage, setNewMessage] = useState(null);
   const newMessageView = useRef();
@@ -68,7 +66,7 @@ export default function ChatHome() {
       }
     };
     getUserFriends();
-  }, [user._id]);
+  }, [friendData, user._id]);
 
   //Get the messages from the sender and initializes the socket
   useEffect(() => {
@@ -139,64 +137,80 @@ export default function ChatHome() {
       email: receiverEmail.current.value,
     };
     try {
-      const findUser = await axios.post("/api/chat/users/email", emailBody);
-      const friendId = {
-        friendId: findUser.data._id,
-      };
-      if (user.email !== findUser.data.email) {
-
-        await axios
-          .put(`/api/chat/users/friends/add/${user._id}`, friendId)
-          .then(async (response) => {
-            const friendId = {
-              friendId: response.data._id,
-            };
-            await axios.put(
-              `/api/chat/users/friends/add/${findUser.data._id}`,
-              friendId
-            );
-          });
-
-        const createConversation = {
-          senderId: user._id,
-          receiverId: findUser.data._id
-        }
-        await axios.post('/api/chat/conversation',createConversation).then( async (response) =>{
-          setCurrentChat(response.data)
-          console.log(currentChat)
-          const messageConvo = {
-            conId: response.data._id,
-            sender: user._id,
-            text: sendMessage,
+      await axios
+        .post("/api/chat/users/email", emailBody)
+        .then(async (getEmailResponse) => {
+          if (getEmailResponse.data === null) {
+            toast.error(`${emailBody.email} account does not exist!`);
+          } else if (!getEmailResponse.status) {
+            toast.error(`Something went wrong. Please try again.`);
           }
-          const receiverId = currentChat.members.find(
-            (member) => member !== user._id
-          );
-          socket.current.emit("sendMessage", {
-            senderId: user._id,
-            receiverId,
-            message: sendMessage,
-          });
-          const messageData = await axios.post(
-            "/api/chat/messages",
-            messageConvo
-          );
-          toast.success(`Message Successfully send to ${findUser.data.name}`)
-          closeModal();
-          setMessages([...messages, messageData.data]);
-          setSendMessage("");
-        })
-        
-        
-        
+          const friendId = {
+            friendId: getEmailResponse.data._id,
+          };
+          //Check if the email is not the current user's email
+          if (user.email !== getEmailResponse.data.email) {
+            await axios
+              .put(`/api/chat/users/friends/add/${user._id}`, friendId)
+              .then(async (addUserResponse) => {
+                const friendId = {
+                  friendId: addUserResponse.data._id,
+                };
+                await axios.put(
+                  `/api/chat/users/friends/add/${getEmailResponse.data._id}`,
+                  friendId
+                );
+              });
 
-      } else {
-        toast.error(`Cannot add your self!`);
-      }
+            const createConversation = {
+              senderId: user._id,
+              receiverId: getEmailResponse.data._id,
+            };
+            //Check if the conversation of two users already exist if not add new one
+            await axios
+              .get(
+                `/api/chat/conversation/getConversation/${user._id}/${getEmailResponse.data._id}`
+              )
+              .then(async (getConversationResponse) => {
+                if (getConversationResponse.data === null) {
+                  await axios
+                    .post("/api/chat/conversation", createConversation)
+                    .then(async (newConversationResponse) => {
+                      const messageConvo = {
+                        conId: newConversationResponse.data._id,
+                        sender: user._id,
+                        text: sendMessage,
+                      };
+                      await axios.post("/api/chat/messages", messageConvo);
+                      setSendMessage("");
+                      toast.success(
+                        `Message Successfully send to ${getEmailResponse.data.name}`
+                      );
+                      closeModal();
+                    });
+                } else {
+                  const messageConvo = {
+                    conId: getConversationResponse.data._id,
+                    sender: user._id,
+                    text: sendMessage,
+                  };
+                  await axios.post("/api/chat/messages", messageConvo);
+                  setSendMessage("");
+                  toast.success(
+                    `Message Successfully send to ${getEmailResponse.data.name}`
+                  );
+                  closeModal();
+                }
+              });
+          } else {
+            toast.error(`sending messag to self is invalid!`);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     const conversationMessages = async () => {
       try {
@@ -289,10 +303,74 @@ export default function ChatHome() {
                   ) : (
                     <>
                       <span className="noConvo">Chat to someone</span>
+                      <div className="row justify-content-end px-5 py-3">
+                        <Fab
+                          color="primary"
+                          onClick={showModal}
+                          aria-label="add"
+                        >
+                          <EditIcon />
+                        </Fab>
+                      </div>
                     </>
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/*  Create Mesage Modal */}
+      <div id="modalComposeMessage" className="modal">
+        {/* Modal content */}
+        <div className="modal-content">
+          <div className="modal-header text-center">
+            <p className="modal-title w-100 font-weight-bold">
+              Create New Message
+            </p>
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+          </div>
+          <div className="modal-body mx-3">
+            <div className="md-form">
+              <label htmlFor="emailAddress" className="mb-2 text-start">
+                Receiver's Email Address
+              </label>
+              <input
+                className="form-control"
+                type="email"
+                name="emailAddress"
+                ref={receiverEmail}
+                placeholder="Enter Email Address"
+                required
+              />
+            </div>
+            <div className="md-form">
+              <label htmlFor="textMessage" className="mt-2 mb-2 text-start">
+                Message
+              </label>
+              <textarea
+                className="form-control"
+                type="text"
+                name="textMessage"
+                value={sendMessage}
+                onChange={(e) => {
+                  setSendMessage(e.target.value);
+                }}
+                placeholder="Enter a message..."
+                required
+              />
+            </div>
+            <div className="modal-footer d-flex justify-content-center">
+              <button
+                type="submit"
+                onClick={handleSendComposedMessage}
+                className="btn btn-info btn-sm btnAdd"
+              >
+                Confirm
+              </button>
             </div>
           </div>
         </div>
