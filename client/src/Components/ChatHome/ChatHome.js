@@ -289,74 +289,10 @@ export default function ChatHome() {
                   ) : (
                     <>
                       <span className="noConvo">Chat to someone</span>
-                      <div className="row justify-content-end px-5 py-3">
-                        <Fab
-                          onClick={showModal}
-                          color="primary"
-                          aria-label="add"
-                        >
-                          <EditIcon />
-                        </Fab>
-                      </div>
                     </>
                   )}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/*  Create Mesage Modal */}
-      <div id="modalComposeMessage" className="modal">
-        {/* Modal content */}
-        <div className="modal-content">
-          <div className="modal-header text-center">
-            <p className="modal-title w-100 font-weight-bold">
-              Create New Message
-            </p>
-            <span className="close" onClick={closeModal}>
-              &times;
-            </span>
-          </div>
-          <div className="modal-body mx-3">
-            <div className="md-form">
-              <label htmlFor="emailAddress" className="mb-2 text-start">
-                Receiver's Email Address
-              </label>
-              <input
-                className="form-control"
-                type="email"
-                name="emailAddress"
-                ref={receiverEmail}
-                placeholder="Enter Email Address"
-                required
-              />
-            </div>
-            <div className="md-form">
-              <label htmlFor="textMessage" className="mt-2 mb-2 text-start">
-                Message
-              </label>
-              <textarea
-                className="form-control"
-                type="text"
-                name="textMessage"
-                value={sendMessage}
-                onChange={(e) => {
-                  setSendMessage(e.target.value);
-                }}
-                placeholder="Enter a message..."
-                required
-              />
-            </div>
-            <div className="modal-footer d-flex justify-content-center">
-              <button
-                type="submit"
-                onClick={handleSendComposedMessage}
-                className="btn btn-info btn-sm btnAdd"
-              >
-                Confirm
-              </button>
             </div>
           </div>
         </div>
