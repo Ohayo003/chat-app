@@ -15,10 +15,11 @@ function ContactList({
   setReceiver,
   setCurrentChat,
   numOfMessage,
-  senderId
+  senderId,
 }) {
   const [userContact, setUserContact] = useState([]);
   const [isOnline, setIsOnline] = useState(false);
+  const [onlineId, setOnlineId] = useState();
 
   //Delete a friend
   const handleDeleteContact = async (friend) => {
@@ -75,10 +76,12 @@ function ContactList({
 
   useEffect(() => {
     onlineUsers.map((element) => {
-      element.userId === userContact._id
-        ? setIsOnline(true)
-        : setIsOnline(false);
-
+      if (element.userId === userContact._id) {
+        setIsOnline(true);
+        setOnlineId(element.userId);
+      } else {
+        setIsOnline(false);
+      }
       return isOnline;
     });
   }, [isOnline, userContact._id, onlineUsers]);
@@ -125,10 +128,16 @@ function ContactList({
             src={userContact.gender === "male" ? MaleAvatar : FemaleAvatar}
             alt=""
           />
-          {isOnline ? <div className="contactsOnlineBadge"></div> : null}
-          {senderId === userContact._id ? (numOfMessage.current !== 0 ? (
-            <div className="unread-messages">{numOfMessage.current}</div>
-          ) : null) : null}
+          {onlineId === userContact._id ? (
+            isOnline ? (
+              <div className="contactsOnlineBadge"></div>
+            ) : null
+          ) : null}
+          {senderId === userContact._id ? (
+            numOfMessage.current !== 0 ? (
+              <div className="unread-messages">{numOfMessage.current}</div>
+            ) : null
+          ) : null}
         </div>
       </div>
       <span className="contactOnlineName">{userContact.name}</span>

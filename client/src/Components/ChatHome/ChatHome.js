@@ -82,9 +82,9 @@ export default function ChatHome() {
       axios.get(`/api/chat/users/${messageData.senderId}`).then((response) => {
         playSound(soundNotification);
         toast.info(`${response.data.name} sent you a mesasge.`);
-        setSenderId(response.data._id);
         numOfMessage.current += 1;
       });
+      setSenderId(messageData.senderId);
       setNewMessage({
         sender: messageData.senderId,
         text: messageData.message,
