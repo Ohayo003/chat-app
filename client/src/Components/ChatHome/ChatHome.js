@@ -22,10 +22,14 @@ export default function ChatHome() {
   const [friendData, setFriendData] = useState([]);
   const [receiver, setReceiver] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [senderId, setSenderId] = useState();
   const receiverEmail = useRef();
   const [newMessage, setNewMessage] = useState(null);
   const newMessageView = useRef();
   const socket = useRef();
+  const numOfMessage = useRef();
+
+
   const showComposeMessageModal = document.getElementById(
     "modalComposeMessage"
   );
@@ -72,10 +76,14 @@ export default function ChatHome() {
   useEffect(() => {
     socket.current = io("ws://localhost:5000");
 
+    numOfMessage.current = 0;
+
     socket.current.on("getMessage", (messageData) => {
       axios.get(`/api/chat/users/${messageData.senderId}`).then((response) => {
         playSound(soundNotification);
         toast.info(`${response.data.name} sent you a mesasge.`);
+        setSenderId(response.data._id);
+        numOfMessage.current += 1;
       });
       setNewMessage({
         sender: messageData.senderId,
@@ -83,7 +91,7 @@ export default function ChatHome() {
         createdAt: Date.now(),
       });
     });
-  }, [soundNotification]);
+  }, [soundNotification,senderId]);
 
   //Update the message conversation
   useEffect(() => {
@@ -258,6 +266,8 @@ export default function ChatHome() {
                           setReceiver={setReceiver}
                           setFriendId={setFriendId}
                           setCurrentChat={setCurrentChat}
+                          numOfMessage={numOfMessage}
+                          senderId={senderId}
                         />
                       </div>
                     ))}

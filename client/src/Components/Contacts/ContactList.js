@@ -14,6 +14,8 @@ function ContactList({
   onlineUsers,
   setReceiver,
   setCurrentChat,
+  numOfMessage,
+  senderId
 }) {
   const [userContact, setUserContact] = useState([]);
   const [isOnline, setIsOnline] = useState(false);
@@ -104,6 +106,7 @@ function ContactList({
               });
           }
           setCurrentChat(response.data);
+          numOfMessage.current = 0;
         });
     } catch (error) {
       console.log(error);
@@ -123,6 +126,9 @@ function ContactList({
             alt=""
           />
           {isOnline ? <div className="contactsOnlineBadge"></div> : null}
+          {senderId === userContact._id ? (numOfMessage.current !== 0 ? (
+            <div className="unread-messages">{numOfMessage.current}</div>
+          ) : null) : null}
         </div>
       </div>
       <span className="contactOnlineName">{userContact.name}</span>
